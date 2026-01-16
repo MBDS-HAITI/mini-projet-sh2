@@ -1,0 +1,55 @@
+.dashboard-container {
+  width: 100%;
+}
+
+.dashboard-section {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+}
+
+/* Thèmes */
+.section-students {
+  background-color: #e3f2fd;
+}
+
+.section-courses {
+  background-color: #e8f5e9;
+}
+
+.section-average {
+  background-color: #fff3e0;
+}
+
+.section-users {
+  background-color: #fce4ec;
+}
+
+/* ===== CARTES ===== */
+.dashboard-card {
+  height: 200px;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-donut {
+  height: 200px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-baton {
+  height: 200px;
+  width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dashboard-card-content {
+  text-align: center;
+}
