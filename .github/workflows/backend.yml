@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "master" ]
     paths:
-      - "backend/**"
+      - "studentManagementAPI/**"
       - ".github/workflows/backend.yml"
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       - name: Build & push backend image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
+          context: ./studentManagementAPI
           push: true
           tags: samh76/studentmanagement-backend:latest
 
