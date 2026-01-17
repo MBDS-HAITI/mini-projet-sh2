@@ -2,8 +2,7 @@ import axios from 'axios';
 import {getToken} from './Services/authentificationService';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BaseUrlApi
-  //baseURL: "http://localhost:8010/api/"
+  baseURL: import.meta.env.VITE_API_BASE
 });
 
 api.interceptors.request.use(

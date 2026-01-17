@@ -1,15 +1,13 @@
 
-const studentGetAll = import.meta.env.VITE_StudentGetAll;
-const studentDetails= import.meta.env.VITE_studentDetails;
 import {api} from '../callClient';
 
 async function getStudents (filters) {
-  let result = await api.get(studentGetAll, {params : filters});
+  let result = await api.get("students", {params : filters});
   return result;
 }
 
 async function getStudent (id) {
-  let result = await api.get(studentDetails+"/"+id);
+  let result = await api.get("sudent/"+id);
   return result;
 }
 
