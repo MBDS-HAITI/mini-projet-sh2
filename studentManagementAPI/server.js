@@ -5,11 +5,11 @@ let student = require('./routes/students');
 let course = require('./routes/courses');
 let grade = require('./routes/grades');
 let agenda = require('./routes/agenda');
-let user = require('../student_management/routes/Utilisateurs')
+let user = require('./routes/Utilisateurs')
 require('dotenv').config();
-let dashboard = require('../student_management/Controller/dashboardController');
+let dashboard = require('./Controller/dashboardController');
 const router = require("express").Router();
-const { authJwt, authorizeRoles } = require("../student_management/Authentification/Auth")
+const { authJwt, authorizeRoles } = require("./Authentification/Auth")
 let mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const uri = process.env.MONGO_URI;
