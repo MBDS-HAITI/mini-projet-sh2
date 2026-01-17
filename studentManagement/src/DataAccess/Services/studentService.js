@@ -7,7 +7,7 @@ async function getStudents (filters) {
 }
 
 async function getStudent (id) {
-  let result = await api.get("sudent/"+id);
+  let result = await api.get("student/"+id);
   return result;
 }
 
