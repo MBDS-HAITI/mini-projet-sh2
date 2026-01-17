@@ -17,7 +17,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import GradeIcon from "@mui/icons-material/Grade";
 
-import { logout } from "../DataAccess/Services/authentificationService";
+import { logout, getCurrentUser } from "../DataAccess/Services/authentificationService";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const MotionAppBar = motion.create(AppBar);
@@ -54,17 +54,37 @@ export default function Header({ themeMode, setThemeMode }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const iconColor = theme.palette.mode === "light" ? "#374151" : "#ffffff";
 
-  const navigate = useNavigate();
+  const currentUser = getCurrentUser();
 
-  const navItems = [
-    { label: "Dashboard", to: "/tableauDeBord", icon: <DashboardIcon fontSize="small" sx={{ color: iconColor }} /> },
-    { label: "Étudiants", to: "/etudiants", icon: <PeopleIcon fontSize="small" sx={{ color: iconColor }} /> },
-    { label: "Agenda", to: "/agenda", icon: <PeopleIcon fontSize="small" sx={{ color: iconColor }} /> },
-    { label: "Cours", to: "/cours", icon: <MenuBookIcon fontSize="small" sx={{ color: iconColor }} /> },
-    { label: "Notes", to: "/notes", icon: <GradeIcon fontSize="small" sx={{ color: iconColor }} /> },
-    { label: "Programmes", to: "/cours", icon: <MenuBookIcon fontSize="small" sx={{ color: iconColor }} /> },
-    { label: "Sessions", to: "/notes", icon: <GradeIcon fontSize="small" sx={{ color: iconColor }} /> }
-  ];
+  const navigate = useNavigate();
+    const navItems = [
+      { label: "Agenda", to: "/agenda", icon: <PeopleIcon fontSize="small" sx={{ color: iconColor }} /> }
+    ];
+
+    if (currentUser && currentUser.studentd) {
+      navItems.push({
+        label: "Mon dossier",
+        to: `/etudiant/${currentUser.studentd}`,
+        icon: <PeopleIcon fontSize="small" sx={{ color: iconColor }} />
+      });
+    } else {
+      navItems.push(
+        { label: "Dashboard", to: "/tableauDeBord", icon: <DashboardIcon fontSize="small" sx={{ color: iconColor }} /> },
+        { label: "Étudiants", to: "/etudiants", icon: <PeopleIcon fontSize="small" sx={{ color: iconColor }} /> },
+        { label: "Cours", to: "/cours", icon: <MenuBookIcon fontSize="small" sx={{ color: iconColor }} /> },
+        { label: "Notes", to: "/notes", icon: <GradeIcon fontSize="small" sx={{ color: iconColor }} /> },
+        { label: "Programmes", to: "/cours", icon: <MenuBookIcon fontSize="small" sx={{ color: iconColor }} /> },
+        { label: "Sessions", to: "/notes", icon: <GradeIcon fontSize="small" sx={{ color: iconColor }} /> }
+      );
+    }
+
+    if (currentUser && currentUser.role=="ADMIN") {
+      navItems.push({
+        label: "Utilisateurs",
+        to: "/tableauDeBord",
+        icon: <PeopleIcon fontSize="small" sx={{ color: iconColor }} />
+      });
+    }
 
   const expandedHeight = isMobile ? 56 : 64;
   const collapsedHeight = isMobile ? 40 : 48;
