@@ -11,7 +11,7 @@ function Footer() {
       }}
     >
       <Typography variant="body2">
-        © 2026 MyCampus · Port-au-Prince · contact@campus.ht
+        © 2026 MBDS|Haiti · Port-au-Prince · contact@campus.ht
       </Typography>
     </Box>
   );
