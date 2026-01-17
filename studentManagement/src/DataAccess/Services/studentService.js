@@ -8,6 +8,7 @@ async function getStudents (filters) {
 
 async function getStudent (id) {
   let result = await api.get("student/"+id);
+  console.log(result);
   return result;
 }
 
