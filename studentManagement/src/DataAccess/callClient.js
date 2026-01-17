@@ -2,7 +2,8 @@ import axios from 'axios';
 import {getToken} from './Services/authentificationService';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE
+  //baseURL: import.meta.env.VITE_API_BASE
+  baseURL: "https://studentmanagementAPI.shenrys.org/api"
 });
 
 api.interceptors.request.use(
