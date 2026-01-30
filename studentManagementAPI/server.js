@@ -7,6 +7,8 @@ let grade = require('./routes/grades');
 let agenda = require('./routes/agenda');
 let user = require('./routes/Utilisateurs')
 require('dotenv').config();
+let session = require('./routes/sessions');
+let program = require('./routes/programs');
 let dashboard = require('./Controller/dashboardController');
 const router = require("express").Router();
 const { authJwt, authorizeRoles } = require("./Authentification/Auth")
@@ -88,6 +90,24 @@ app.route(prefix + '/agenda')
 
 app.route(prefix + '/dashboard/filters')
 .get(authJwt, authorizeRoles("ADMIN", "SCOLARITE"), dashboard.getDashboardFilters);
+
+app.route(prefix + '/programs')
+.get(authJwt, authorizeRoles("ADMIN", "SCOLARITE", "STUDENT"), program.getAll)
+.post(authJwt, authorizeRoles("ADMIN", "SCOLARITE"), program.create);
+
+app.route(prefix + '/program/:_id')
+.get(authJwt, authorizeRoles("ADMIN", "SCOLARITE", "STUDENT"), program.getProgram);
+
+app.route(prefix + '/degrees')
+.get(authJwt, authorizeRoles("ADMIN", "SCOLARITE", "STUDENT"), program.getDegree);
+
+app.route(prefix + '/sessions')
+.get(authJwt, authorizeRoles("ADMIN", "SCOLARITE", "STUDENT"), session.getAll)
+.post(authJwt, authorizeRoles("ADMIN", "SCOLARITE"), session.create);
+
+app.route(prefix + '/session/:_id')
+    .get(authJwt, authorizeRoles("SCOLARITE","ADMIN", "STUDENT"), session.getSession);
+
 
 app.get('/health', (req, res) => res.status(200).send('OK'));
 

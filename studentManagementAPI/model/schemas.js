@@ -1,4 +1,5 @@
 let mongoose = require('mongoose');
+let functions = require("../functions");
 let Schema = mongoose.Schema;
 
 let studentSchema = new Schema({
@@ -14,7 +15,7 @@ let studentSchema = new Schema({
   referencePhone: { type: String, required: true },
   address: { type: String, required: true },
 
-  integrationDate: { type: Date, required: true },
+  integrationDate: { type: Date, required: true, default : Date.now},
 
   code: { type: String, unique: true },
 
@@ -23,6 +24,36 @@ let studentSchema = new Schema({
     ref: "User",
     default: null
   }
+});
+
+studentSchema.pre("save", async function () {
+  if (this.code) return;
+
+  const baseCode = functions.generateBaseCode(
+    this.firstName,
+    this.lastName,
+    this.integrationDate
+  );
+
+  const existing = await mongoose
+    .model("Student")
+    .find({ code: { $regex: `^${baseCode}` } })
+    .select("code");
+
+  let suffix = 1;
+
+  if (existing.length > 0) {
+    const suffixes = existing
+      .map(s => {
+        const parts = s.code.split("-");
+        return Number(parts[parts.length - 1]);
+      })
+      .filter(n => !isNaN(n));
+
+    suffix = Math.max(...suffixes) + 1;
+  }
+
+  this.code = `${baseCode}-${String(suffix).padStart(2, "0")}`;
 });
 
 let Student = mongoose.model('Student', studentSchema);
@@ -229,8 +260,8 @@ let sessionSchema = Schema({
       "année académique invalide. Exemple attendu : 2024 ou 2024/2025"
     ]
     },
-    startDate: Date,
-    endDate: Date,
+    startDate: {type :Date},
+    endDate: {type : Date},
     quota : {type : Number, default:1}
 });
 
@@ -242,7 +273,7 @@ let logSchema = Schema({
     ref: "User",
     required: true
     },
-    login: {type : Date, default : "2026-01-12T00:55:42.466+00:00"}
+    login: {type : Date, default : Date.now}
   },
     {
       timestamps : true

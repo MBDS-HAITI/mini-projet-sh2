@@ -1,43 +1,61 @@
-let {Student, Program} = require('../model/schemas');
+let {Student, Program, Degree} = require('../model/schemas');
 
 function getAll(req, res) {
-    if(req.body.studentId){
-        Program.find(req.body.student, req.body.session).then((programs) => {
-        res.send(programs);
-    }).catch((err) => {
-        res.send(err);
-    });
-    }
+  const { degree } = req.query;
 
-    Program.find().then((programs) => {
-        res.send(programs);
-    }).catch((err) => {
-        res.send(err);
-    });
+  const filter = {};
+
+  if (degree) {
+    filter.degree = degree;
+  }
+
+  Program.find(filter)
+    .then(programs => res.json(programs))
+    .catch(err => res.status(500).json(err));
 }
-
 
 function create(req, res) {
-    let student = new Program();
-    student.firstName = req.body.firstName;
-    student.lastName = req.body.lastName;
-    student.integrationDate = req.body.integrationDate;
+  const program = new Program({
+    name: req.body.name,
+    degree: req.body.degree
+  });
 
-    student.save()
-        .then((student) => {
-                res.json({message: `student saved with id ${student.id}!`});
-            }
-        ).catch((err) => {
-        res.send('cant post student ', err);
+  program.save()
+    .then(savedProgram => {
+      res.status(201).json({
+        message: `Program saved with id ${savedProgram._id}`,
+        program: savedProgram
+      });
+    })
+    .catch(err => {
+      res.status(400).json({
+        message: "Can't post program",
+        error: err
+      });
     });
 }
 
-function getStudent(req, res){
-    Student.find(req.query.studentId).then((student) => {
-        res.send(student);
-    }).catch((err) => {
-        res.send(err);
-    });
+function getProgram(req, res) {
+  const { _id } = req.params;
+
+  if (!_id) {
+    return res.status(400).json({ message: "L'id du programme est manquant" });
+  }
+
+  Program.findById(_id)
+    .then(program => {
+      if (!program) {
+        return res.status(404).json({ message: "Programme non trouvé" });
+      }
+      res.json(program);
+    })
+    .catch(err => res.status(500).json(err));
 }
 
-module.exports = {getAll, create, getStudent};
+function getDegree(req, res){
+    Degree.find()
+    .then(degrees => res.json(degrees))
+    .catch(err => res.status(500).json(err));
+}
+
+module.exports = {getAll, create, getProgram, getDegree};

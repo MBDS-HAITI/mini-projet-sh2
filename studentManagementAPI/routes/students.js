@@ -19,14 +19,13 @@ function create(req, res) {
     student.selfPhone= req.body.selfPhone;
     student.referencePhone= req.body.referencePhone;
     student.address= req.body.address;
-    student.code= req.body.code;
 
     student.save()
-        .then((student) => {
-                res.json({message: `student saved with id ${student.id}!`});
+        .then((savedStudent) => {
+                res.json(savedStudent);
             }
         ).catch((err) => {
-        res.send('cant post student ', err);
+        res.send('Impossible de post le student', err);
     });
 }
 
