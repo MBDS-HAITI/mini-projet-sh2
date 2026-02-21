@@ -7,9 +7,15 @@ async function getStudents (filters) {
 }
 
 async function getStudent (id) {
-  let result = await api.get("student/"+id);
+    console.log(id);
+    let result = await api.get("student/"+id);
   console.log(result);
   return result;
 }
 
-export {getStudents, getStudent}
+async function createStudent(form){
+  let result = await api.post("students", form);
+  console.log(result);
+  return result;
+}
+export {getStudents, getStudent, createStudent}

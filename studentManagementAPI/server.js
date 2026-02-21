@@ -8,6 +8,7 @@ let agenda = require('./routes/agenda');
 let user = require('./routes/Utilisateurs')
 require('dotenv').config();
 let session = require('./routes/sessions');
+let inscription = require('./routes/inscriptions');
 let program = require('./routes/programs');
 let dashboard = require('./Controller/dashboardController');
 const router = require("express").Router();
@@ -104,6 +105,10 @@ app.route(prefix + '/degrees')
 app.route(prefix + '/sessions')
 .get(authJwt, authorizeRoles("ADMIN", "SCOLARITE", "STUDENT"), session.getAll)
 .post(authJwt, authorizeRoles("ADMIN", "SCOLARITE"), session.create);
+
+app.route(prefix + '/inscriptions')
+    .get(authJwt, authorizeRoles("ADMIN", "SCOLARITE", "STUDENT"), inscription.getAll)
+    .post(authJwt, authorizeRoles("ADMIN", "SCOLARITE"), inscription.create);
 
 app.route(prefix + '/session/:_id')
     .get(authJwt, authorizeRoles("SCOLARITE","ADMIN", "STUDENT"), session.getSession);

@@ -154,12 +154,12 @@ export default function Header({ themeMode, setThemeMode }) {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {!isMobile && !collapsed && (
+          {/* {!isMobile && !collapsed && (
             <Search>
               <SearchIcon sx={{ color: iconColor }} />
               <SearchInput placeholder="Rechercher..." />
             </Search>
-          )}
+          )} */}
 
           <IconButton onClick={() => setThemeMode(themeMode === "dark" ? "light" : "dark")}>
             {themeMode === "dark"
@@ -184,7 +184,7 @@ export default function Header({ themeMode, setThemeMode }) {
 
       {/* MOBILE DRAWER */}
       <Drawer open={menuMobileOpen} onClose={() => setMenuMobileOpen(false)}>
-        <List sx={{ width: 220 }}>
+        <List sx={{ width: 220, marginTop: 10 }}>
           {navItems.map((it) => (
             <ListItemButton key={it.to} component={NavLink} to={it.to}>
               {it.icon}

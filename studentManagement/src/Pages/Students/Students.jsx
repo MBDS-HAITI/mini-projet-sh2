@@ -17,7 +17,7 @@ function Students() {
 }
 
 function StudentDetails(){
-  const { id } = useParams();
+  const { id, code } = useParams();
   const [studentDetails, setStudentDetails] = useState([]);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function StudentDetails(){
         .catch(console.error);
     
   }, []);
-  return <StudentCard data={studentDetails} />;
+  return <StudentCard code={code} data={studentDetails} />;
 }
 
 export {Students, StudentDetails}

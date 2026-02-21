@@ -6,6 +6,8 @@ import { Courses } from "../Pages/Courses/Courses";
 import { Agenda } from "../Pages/Agenda";
 import { Grades } from "../Pages/Grades/Grades";
 import { Home } from "../Pages/Home/Home";
+import { Inscription } from "../Pages/Inscriptions/Inscription";
+import { NewStudent } from "../Pages/Students/NewStudent";
 import { Unauthorized } from "../Pages/Authentification/Unauthorized";
 import { AuthChecking, RoleChecking } from "../Components/AuthCkeking";
 
@@ -24,7 +26,7 @@ function AppRouters({ themeMode, setThemeMode }){
           </RoleChecking>
          }/>
           <Route
-          path="/etudiant/:id"
+          path="/etudiant/:id/:code"
           element={
             <RoleChecking roles={["SCOLARITE", "ADMIN", "STUDENT"]}>
               <StudentDetails />
@@ -37,7 +39,18 @@ function AppRouters({ themeMode, setThemeMode }){
                   <Students/>
                 </RoleChecking>
           }/>
-
+          <Route path= "/inscription/:code"
+            element ={
+                <RoleChecking roles={["SCOLARITE", "ADMIN"]}>
+                  <Inscription/>
+                </RoleChecking>
+          }/>
+          <Route path= "/nouvel-etudiant"
+            element ={
+                <RoleChecking roles={["SCOLARITE", "ADMIN"]}>
+                  <NewStudent/>
+                </RoleChecking>
+          }/>
           <Route path= "/agenda"
             element ={
                 <RoleChecking roles={["SCOLARITE", "ADMIN", "STUDENT"]}>

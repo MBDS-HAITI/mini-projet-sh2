@@ -19,7 +19,8 @@ import {
   TableBody,
   useMediaQuery,
   Stack,
-  TableContainer
+  TableContainer,
+  Button
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -30,6 +31,7 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 function StudentsTable({ rows, onRowSelect }) {
   const columns = [
@@ -85,7 +87,8 @@ function StudentsTable({ rows, onRowSelect }) {
         }}
         disableRowSelectionOnClick
         onRowClick={(params) => {
-            onRowSelect(params.id);
+            const { code} = params.row;
+            onRowSelect(params.id, code);
         }}
     />
     </Box>
@@ -94,30 +97,62 @@ function StudentsTable({ rows, onRowSelect }) {
 
 
 
-function StudentList({students = []}){
-    const navigate = useNavigate();
+function StudentList({ students = [] }) {
+  const navigate = useNavigate();
+  //const studentId = null;
 
-  const handleRowClick = (id) => {
-    navigate(`/etudiant/${id}`);
+  const handleRowClick = (id, code) => {
+    navigate(`/etudiant/${id}/${code}`);
   };
- return (
-    <StudentsTable
-      rows={students}
-      onRowSelect={handleRowClick}
-    />
+
+  // Fonction pour gérer l'inscription (nouveau ou ancien étudiant)
+  const handleNewRegistration = () => {
+      navigate("/nouvel-etudiant");
+  };
+
+  return (
+    <div>
+      {/* Bouton Nouvelle Inscription */}
+      <Button 
+        variant="contained" 
+        color="primary" 
+        sx={{ marginBottom: 2, float: 'right' }}
+        onClick={handleNewRegistration}
+      >
+        Nouvelle Inscription
+      </Button>
+
+      {/* Tableau des étudiants */}
+      <StudentsTable rows={students} onRowSelect={handleRowClick} />
+    </div>
   );
 }
 
-function StudentCard({ data }) {
+function StudentCard({ code, data }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const navigate = useNavigate();
   return (
     <Box p={{ xs: 1, md: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        📘 Dossier académique
-      </Typography>
-
+        <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={3}
+        >
+          <Typography variant="h4" gutterBottom>
+            📘 Dossier académique
+          </Typography>
+            <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AddCircleOutlineIcon />}
+                size={isMobile ? "small" : "medium"}
+                onClick={() => navigate(`/inscription/${code}`)}
+            >
+                {isMobile ? "Inscrire" : "Nouvelle Inscription"}
+            </Button>
+        </Stack>
       {data.map((session) => (
         <Accordion key={session._id} defaultExpanded>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -130,7 +165,7 @@ function StudentCard({ data }) {
           </AccordionSummary>
 
           <AccordionDetails>
-            {/* 📊 GRAPHIQUE */}
+
             <Box mb={4}>
               <Typography variant="subtitle1" gutterBottom>
                 Moyenne par cours
@@ -159,7 +194,6 @@ function StudentCard({ data }) {
               </ResponsiveContainer>
             </Box>
 
-            {/* 📚 COURS */}
             <Grid container spacing={2}>
               {session.courses.map((course) => (
                 <Grid item xs={12} md={6} key={course.course._id}>
@@ -193,7 +227,6 @@ function StudentCard({ data }) {
                         {course.course.code} — {course.status}
                       </Typography>
 
-                      {/* 📋 TABLE RESPONSIVE */}
                       <TableContainer sx={{ overflowX: "auto" }}>
                         <Table size="small">
                           <TableHead>
