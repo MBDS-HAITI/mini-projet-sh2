@@ -1,5 +1,5 @@
 
-let {Student, Inscription, Session, Course, Program, StudentCourses} = require('../model/schemas');
+let { Inscription, Course, Program, StudentCourses} = require('../model/schemas');
 
 function getAll(req, res) {
     if(req.body.studentId){
@@ -35,19 +35,30 @@ function getAll(req, res) {
 
 
 function create(req, res) {
-    if(req.body.id){
-        Inscription.find(req.body.id).then((ins) => {
-        ins.status = req.body.status;
-        ins.program = req.body.programId;
-        ins.student = req.body.studentId;
-        ins.session = req.body.sessionId;
-        inscription.save().then((saved) => {
-                res.json({message: `inscription saved with id ${saved.id}!`});
-            }
-        );
-    }).catch((err) => {
-        console.log(err.message);
-    });
+    if (req.body.id) {
+        Inscription.findById(req.body.id)
+            .then((ins) => {
+                if (!ins) {
+                    return res.status(404).json({ message: "Inscription non trouvée" });
+                }
+
+                // 2. Mise à jour des champs
+                ins.status = req.body.status;
+                ins.program = req.body.programId;
+                ins.student = req.body.studentId;
+                ins.session = req.body.sessionId;
+
+                return ins.save();
+            })
+            .then((saved) => {
+                if (saved) {
+                    res.json({ message: `Inscription mise à jour avec l'ID ${saved._id}!` });
+                }
+            })
+            .catch((err) => {
+                console.error("Erreur Inscription:", err.message);
+                res.status(500).json({ error: err.message });
+            });
     }
     else{
      let inscription = new Inscription();   
